@@ -12,6 +12,13 @@
 
 # 写个循环，每次写入文件的时候给文件命名加个变量不就好了,或者在文件命名的时候加个系统时间
 # 或者把xml全部抓取出来，然后用正则清洗，正则替换
+# 移除作者名字可以找共同点 充其量也就是对字符串处理 新建文件这个每抓取一次新建一次
+
+
+#  re.sub 可以实现正则替换，看文档：https://docs.python.org/3/library/re.html#module-contents
+# 具体该怎么写，你得先定义好规则，然后才能写。。。
+# 如果只是把 ell 替换成 一二三，那你不需要用 regex，用 string 的 replace 方法就够了 https://docs.python.org/3/library/stdtypes.html
+
 
 
 
