@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+# !usr/bin/env python3
 
 #coding:utf-8
 
@@ -38,6 +38,7 @@ import feedparser
 import pprint
 import datetime
 import time
+import re
 
 url = 'https://rss.zhufn.fun/zhihu/people/activities/chenlong7890'
 
@@ -56,21 +57,39 @@ soup = BeautifulSoup(response.text, 'html.parser') #使用 BeautifulSoup 进行�
 # rss解析
 rss_zhihu = feedparser.parse(url)
 # 抓取内容 ， depth 抓取深度
-pprint.pprint(rss_zhihu,depth=2)
+# pprint.pprint(rss_zhihu,depth=2)
 
 zhihudatas = []
 
-# 找到数据对应的 html 节点，然后使用get_text()函数获取
+# 找到数据对应的 xpath 节点，然后使用get_text()函数获取
 
-for zhihudata in soup.find_all('description'):
+for zhihudata in soup.find_all('item'):
 
     zhihudatas.append(zhihudata.get_text())
 
+# pprint.pprint(type(zhihudatas))
+# #尝试通过re.sub处理文本替换
+# data_re = re.sub('(\u9648\u9f99)','',str(zhihudatas))
+# data_resub = list(str(data_re))
+# data_resub = ''.join(data_re)
+# pprint.pprint(type(data_re))
+# pprint.pprint(data_resub)
+
+zhihudatas = str(zhihudatas).replace('\u9648\u9f99','').replace('\\n','').replace('<p>','\n<p>',1).replace('赞同了','\r\n\n赞同了').replace('回答了','\r\n\n回答了').replace('发布了','\r\n\n发布了').replace('收藏了','\r\n\n收藏了').replace('https','\r\nhttps').replace('"\r\nhttps','"https').replace('=\r\nhttps','=https').replace("', '","\n").split('\n')
+
+
+pprint.pprint(zhihudatas)
+pprint.pprint(type(zhihudatas))
+
 # 最后写入到相关文件夹中
+localTime = time.strftime('%Y%m%d%H%M%S.md',time.localtime(time.time()))
 
-with open(r'e:/tools/zhihu.md', 'w', encoding='utf-8') as f:
+# with open(r'e:/tools/zhihu.md', 'w', encoding='utf-8') as f:
+with open(localTime, 'a', encoding='utf-8') as f:
 
+    # f.write('\n'.join(data_resub)) 
     f.write('\n'.join(zhihudatas)) 
+    
 
 # with open(r'e:/tools/pyRSS2.txt', 'w', encoding='utf-8') as f:
 
